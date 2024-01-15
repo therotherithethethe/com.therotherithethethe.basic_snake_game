@@ -5,7 +5,7 @@
         private String[,] _table;
         private int _xLength;
         private int _yLength;
-        private const String _texture = " ";
+        private const String _texture = "⬜";
         public Grid(int xLength, int yLength)
         {
             if (xLength <= 0 || yLength <= 0)
@@ -21,23 +21,20 @@
         //to do
         private void TableInitialize() 
         {
-            for (int i = 0; i < _xLength; i++)
+            for (int i = 0; i < _yLength; i++)
             {
-                for (int j = 0; j < _yLength; j++)
+                for (int j = 0; j < _xLength; j++)
                 {
-                    _table[j, i] = _texture;
+                    _table[i, j] = _texture;
                 }
             }
         }
 
-        public string[,] Table
-        {
-            get { return _table; }
-        }
+        public string[,] Table => _table;
 
         public void SetTextureToGrid(int x, int y, string texture)
         {
-            _table[y-1, x-1] = x >= 0 && x <= _xLength - 1 || y >= 0 && y <= _yLength - 1 ? texture :
+            _table[y-1, x-1] = x >= 0 && x <= _xLength || y >= 0 && y <= _yLength ? texture :
                 throw new ArgumentException("Coordinates exception");
         }
 

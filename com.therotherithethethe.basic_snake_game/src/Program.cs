@@ -15,9 +15,11 @@ namespace com.therotherithethethe.basic_snake_game.src
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Grid grid = new(20, 10);
-            Snake snake = new(grid);
-            MainLogic mainLogic = new(grid, snake);
+            Grid grid = new(10, 5);
+
+            Random r = new Random();
+            Cell snakeHead = new(grid);
+            MainLogic mainLogic = new(grid, snakeHead);
             Menu menu = new(mainLogic);
 
             menu.Print();

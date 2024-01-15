@@ -1,22 +1,21 @@
 ﻿namespace com.therotherithethethe.basic_snake_game.src.dal
 {
-    public class Snake
+    public class Cell
     {
-        private int _x, _y;
+        private int _x = 1;
+        private int _y = 1;
         private Grid _grid;
-        private const String _texture = "▣";
+        private String _texture = "⬛";
 
-        public Snake(Grid grid)
+        public Cell(Grid grid)
         {
             _grid = grid;
-            Random r = new Random();
-            _x = r.Next(1, grid.XLength);
-            _y = r.Next(1, grid.YLength);
         }
 
         public string Texture
         {
             get { return _texture; }
+            set { _texture = value; }
         }
 
         public int X
@@ -46,5 +45,6 @@
 
             }
         }
+        public Grid Grid => _grid;
     }
 }

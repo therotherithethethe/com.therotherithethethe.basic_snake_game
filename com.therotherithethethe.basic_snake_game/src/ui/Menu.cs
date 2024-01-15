@@ -1,18 +1,19 @@
 ﻿using com.therotherithethethe.basic_snake_game.src.bl;
 using com.therotherithethethe.basic_snake_game.src.dal;
+using System.Text;
 
 namespace com.therotherithethethe.basic_snake_game.src.ui
 {
     internal class Menu
     {
-        private Snake _snake;
+        private Cell _snakeHead;
         private Grid _grid;
         private MainLogic _logic;
 
         public Menu(MainLogic mainLogic)
         {
             _grid = mainLogic.Grid;
-            _snake = mainLogic.Snake;
+            _snakeHead = mainLogic.SnakeHead;
             _logic = mainLogic;
         }
 
@@ -36,14 +37,18 @@ namespace com.therotherithethethe.basic_snake_game.src.ui
         public void PrintCurrentGameStage()
         {
             Console.Clear();
+            StringBuilder txt = new StringBuilder();
             for (int y = 0; y < _grid.YLength; y++)
             {
-                Console.WriteLine();
+               // Console.WriteLine();
+                txt.Append("\n");
                 for (int x = 0; x <_grid.XLength; x++)
                 {
-                    Console.Write(_grid.Table[y, x]);
+                    txt.Append(_grid.Table[y, x]);
+                  //  Console.Write(_grid.Table[y, x]);
                 }
             }
+            Console.Write(txt);
         }
     }
 }
