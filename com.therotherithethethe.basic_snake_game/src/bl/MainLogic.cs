@@ -13,7 +13,11 @@ namespace com.therotherithethethe.basic_snake_game.src.bl
         {
             _grid = grid;
             _snakeCells[0] = snakeHead;
-            _food = new Cell(_grid) { Texture = "X"};
+
+            _food = new Cell(_grid) { 
+                Texture = "X"
+            };
+
             InitializeGameTable();
             SpawnFood();
         }
@@ -24,13 +28,26 @@ namespace com.therotherithethethe.basic_snake_game.src.bl
         public void SpawnFood()
         {
             Random r = new Random();
+            bool isFoodXYEqualSnakeXY;
             int x, y;
 
             do
             {
+                isFoodXYEqualSnakeXY = false;
                 x = r.Next(1, _grid.XLength + 1);
                 y = r.Next(1, _grid.YLength + 1);
-            } while (x == _snakeCells[0].X && y == _snakeCells[0].Y);
+
+                for (int i = 0; i < _snakeCells.Length; i++)
+                {
+                    if(x == _snakeCells[i].X && y == _snakeCells[i].Y) 
+                    {
+                        isFoodXYEqualSnakeXY = true;
+                    }
+
+                }
+            } while (isFoodXYEqualSnakeXY);
+
+           
 
             _food.X = x;
             _food.Y = y;
@@ -43,13 +60,21 @@ namespace com.therotherithethethe.basic_snake_game.src.bl
             //int tempX = _snakeCells[0].X;
             //int tempY = _snakeCells[0].Y;
             Cell[] coordinatesBuffer = new Cell[_snakeCells.Length];
+            int tailXCoordinates = _snakeCells[_snakeCells.Length - 1].X;
+            int tailYCoordinates = _snakeCells[_snakeCells.Length - 1].Y;
+            //Cell lastCell = _snakeCells[_snakeCells.Length - 1];
+            Cell lastCell = new Cell(_grid)
+            {
+                X = _snakeCells[_snakeCells.Length - 1].X,
+                Y = _snakeCells[_snakeCells.Length - 1].Y
+            };
 
-            for(int i = 0; i < coordinatesBuffer.Length; i++)
+            for (int i = 0; i < coordinatesBuffer.Length; i++)
             {
                 coordinatesBuffer[i] = new Cell(_grid) 
                 {
                     X = _snakeCells[i].X,
-                    Y = _snakeCells[i].Y,
+                    Y = _snakeCells[i].Y
                 };
             }
 
@@ -60,48 +85,34 @@ namespace com.therotherithethethe.basic_snake_game.src.bl
                 case ConsoleKey.UpArrow:
 
                     _snakeCells[0].Y = _snakeCells[0].Y - 1;
-
-                    for(int i = 1; i < coordinatesBuffer.Length; i++)
-                    {
-                        _snakeCells[i].Y = coordinatesBuffer[i - 1].Y;
-                        _snakeCells[i].X = coordinatesBuffer[i - 1].X;
-                    }
+                    
                     break;
 
                 case ConsoleKey.DownArrow:
                     _snakeCells[0].Y = _snakeCells[0].Y + 1;
 
-                    for (int i = 1; i < coordinatesBuffer.Length; i++)
-                    {
-                        _snakeCells[i].Y = coordinatesBuffer[i - 1].Y;
-                        _snakeCells[i].X = coordinatesBuffer[i - 1].X;
-                    }
                     break;
 
                 case ConsoleKey.LeftArrow:
                     _snakeCells[0].X = _snakeCells[0].X - 1;
 
-                    for (int i = 1; i < coordinatesBuffer.Length; i++)
-                    {
-                        _snakeCells[i].Y = coordinatesBuffer[i - 1].Y;
-                        _snakeCells[i].X = coordinatesBuffer[i - 1].X;
-                    }
                     break;
 
                 case ConsoleKey.RightArrow:
                     _snakeCells[0].X = _snakeCells[0].X + 1;
 
-                    for (int i = 1; i < coordinatesBuffer.Length; i++)
-                    {
-                        _snakeCells[i].Y = coordinatesBuffer[i - 1].Y;
-                        _snakeCells[i].X = coordinatesBuffer[i - 1].X;
-                    }
                     break;
                 default:
                     _snakeCells[0].X = _snakeCells[0].X;
                     break;
             }
-            //_grid.SetTextureToGrid(_snakeCells[0].X, _snakeCells[0].Y, _snakeCells[0].Texture);
+
+            for (int i = 1; i < coordinatesBuffer.Length; i++)
+            {
+                _snakeCells[i].Y = coordinatesBuffer[i - 1].Y;
+                _snakeCells[i].X = coordinatesBuffer[i - 1].X;
+            }
+
 
             for (int i = 0; i < _snakeCells.Length; i++)
             {
@@ -112,55 +123,48 @@ namespace com.therotherithethethe.basic_snake_game.src.bl
 
             if (_snakeCells[0].X == _food.X && _snakeCells[0].Y == _food.Y)
             {
-                SpawnFood();
-                int lastCell = _snakeCells.Length;
-                Cell[] newSnakeCells = new Cell[lastCell + 1];
 
+                Cell[] newSnakeCells = new Cell[_snakeCells.Length + 1];
+                
 
-                for (int i = 0; i < _snakeCells.Length; i++)
+                for(int i = 0;i < _snakeCells.Length;i++)
                 {
                     newSnakeCells[i] = _snakeCells[i];
                 }
+                newSnakeCells[newSnakeCells.Length - 1] = new Cell(_grid) { 
+                    X = lastCell.X, 
+                    Y = lastCell.Y 
+                };
 
-                if (lastCell == 0)
-                {
-                    newSnakeCells[0] = new Cell(_grid);
-                }
+                _snakeCells = newSnakeCells;
+                _grid.SetTextureToGrid(lastCell.X, lastCell.Y, lastCell.Texture);
+                SpawnFood();
 
-                /*switch (choice.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        newSnakeCells[lastCell].Y = _snakeCells[0].Y + 1;
-                        newSnakeCells[lastCell].X = _snakeCells[0].X;
-                        _grid.SetTextureToGrid(newSnakeCells[lastCell].X, newSnakeCells[lastCell].Y, _snakeCells[0].Texture);
-                        break;
-
-                    case ConsoleKey.DownArrow:
-                        _snakeCells[0].Y = _snakeCells[0].Y + 1;
-                        break;
-
-                    case ConsoleKey.LeftArrow:
-                        _snakeCells[0].X = _snakeCells[0].X - 1;
-                        break;
-
-                    case ConsoleKey.RightArrow:
-                        _snakeCells[0].X = _snakeCells[0].X + 1;
-                        break;
-
-                }*/
             }
 
 
         }
-        private void ApplySnakeToGrid(Cell[] cells)
+        public bool IsGameOver()
         {
-            for(int i = 0; i < _snakeCells.Length; i++)
+            for (int i = 0; i < _snakeCells.Length; i++)
             {
-                _grid.SetTextureToGrid(cells[i].X, cells[i].Y, _snakeCells[0].Texture);
+                for (int j = 0; j < _snakeCells.Length; j++)
+                {
+                    if (i == j || _snakeCells.Length == 1)
+                    {
+                        continue;
+                    }
+                    if ((_snakeCells[j].X == _snakeCells[i].X) && (_snakeCells[j].Y == _snakeCells[i].Y))
+                    {
+                        return true;
+                    }
+                }
             }
+            return _snakeCells[0].X == _grid.XLength + 1 || _snakeCells[0].X < 1 || _snakeCells[0].Y == _grid.YLength + 1 || _snakeCells[0].Y < 1;
+
         }
         public Grid Grid => _grid;
-        public Cell SnakeHead => _snakeCells[0];
+        public Cell[] SnakeCells => _snakeCells;
 
     }
 }

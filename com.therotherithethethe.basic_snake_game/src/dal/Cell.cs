@@ -22,13 +22,8 @@
         {
             get { return _x; }
             set 
-            {
-                if (value <= 0 || value > _grid.XLength)
-                {
-                    throw new ArgumentException("value must be positive and smaller than grid size");
-                }
+            {               
                 _x = value;
-
             }
         }
 
@@ -36,13 +31,8 @@
         {
             get { return _y; }
             set
-            {
-                if (value <= 0 || value > _grid.YLength)
-                {
-                    throw new ArgumentException("value must be positive and smaller than grid size");
-                }
+            { 
                 _y = value;
-
             }
         }
         public Grid Grid => _grid;

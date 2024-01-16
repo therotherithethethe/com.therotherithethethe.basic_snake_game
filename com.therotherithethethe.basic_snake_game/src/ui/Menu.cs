@@ -10,10 +10,12 @@ namespace com.therotherithethethe.basic_snake_game.src.ui
         private Grid _grid;
         private MainLogic _logic;
 
+        int cellCounter;
+
         public Menu(MainLogic mainLogic)
         {
             _grid = mainLogic.Grid;
-            _snakeHead = mainLogic.SnakeHead;
+            _snakeHead = mainLogic.SnakeCells[0];
             _logic = mainLogic;
         }
 
@@ -24,7 +26,7 @@ namespace com.therotherithethethe.basic_snake_game.src.ui
             switch (Console.ReadKey().KeyChar)
             {
                 case '1':
-                    while(true)
+                    while(!_logic.IsGameOver())
                     {
                         PrintCurrentGameStage();
                         _logic.UpdateGameTable();
@@ -40,12 +42,10 @@ namespace com.therotherithethethe.basic_snake_game.src.ui
             StringBuilder txt = new StringBuilder();
             for (int y = 0; y < _grid.YLength; y++)
             {
-               // Console.WriteLine();
                 txt.Append("\n");
                 for (int x = 0; x <_grid.XLength; x++)
                 {
                     txt.Append(_grid.Table[y, x]);
-                  //  Console.Write(_grid.Table[y, x]);
                 }
             }
             Console.Write(txt);

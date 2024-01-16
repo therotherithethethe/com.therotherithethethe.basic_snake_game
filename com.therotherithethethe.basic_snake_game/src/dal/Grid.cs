@@ -34,8 +34,16 @@
 
         public void SetTextureToGrid(int x, int y, string texture)
         {
-            _table[y-1, x-1] = x >= 0 && x <= _xLength || y >= 0 && y <= _yLength ? texture :
-                throw new ArgumentException("Coordinates exception");
+            if(x <= 0 || y <= 0 || x >= _xLength + 1 || y >= _yLength + 1)
+            {
+                //do nothing
+            }
+            else
+            {
+                _table[y - 1, x - 1] = x >= 0 && x <= _xLength || y >= 0 && y <= _yLength ? texture :
+                    throw new ArgumentException("Coordinates exception");
+            }
+
         }
 
         public int XLength => _xLength;
